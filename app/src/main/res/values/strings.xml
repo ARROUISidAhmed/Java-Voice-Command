@@ -1,4 +1,13 @@
 <resources>
-    <string name="app_name">ReconnaissanceVocale</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">RecoVoca</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="avance">Avance</string>
+    <string name="recule">Recule</string>
+    <string name="droite">Droite</string>
+    <string name="gauche">Gauche</string>
+    <string name="tourneDroite">Tourne à droite</string>
+    <string name="tourneGauche">Tourne à gauche</string>
+    <string name="flip">Fais un flip</string>
+    <string name="arreteToi">Arrête toi</string>
+    <string name="etatUrgence">Etat d\'urgence</string>
 </resources>

@@ -1,39 +1,34 @@
 package com.m1ihmdl.arroui.reconnaissancevocale;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.media.MediaRecorder;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import java.io.IOException;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = "AudioRecordTest";
-    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    // Requesting permission to RECORD_AUDIO
-    private MediaRecorder mRecorder = null;
-    private boolean permissionToRecordAccepted = false;
-    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Button settings = (Button) findViewById(R.id.action_settings);
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, Settings.class));
+            }
+        });
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,37 +61,5 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_RECORD_AUDIO_PERMISSION:
-                permissionToRecordAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                break;
-        }
-        if (!permissionToRecordAccepted) finish();
 
-    }
-
-    private void startRecording(String mFileName) {
-        mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setOutputFile(mFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
-        try {
-            mRecorder.prepare();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
-        }
-
-        mRecorder.start();
-    }
-
-    private void stopRecording() {
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
-    }
 }
