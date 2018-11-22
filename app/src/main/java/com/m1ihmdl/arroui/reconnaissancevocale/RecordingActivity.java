@@ -2,7 +2,6 @@ package com.m1ihmdl.arroui.reconnaissancevocale;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,12 +18,13 @@ public class RecordingActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "AudioRecordTest";
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 1;
     private MediaRecorder mRecorder;
     private String basePath;
     private Dialog myDialog;
     private boolean permissionToRecordAccepted = false;
     private boolean recording = false;
-    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
+    private String[] permissions = {Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,7 @@ public class RecordingActivity extends AppCompatActivity {
 
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION);
         basePath = getExternalCacheDir().getAbsolutePath();
         myDialog = new Dialog(this);
         myDialog.setContentView(R.layout.custompopup);
@@ -152,25 +153,13 @@ public class RecordingActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_RECORD_AUDIO_PERMISSION:
-                permissionToRecordAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                break;
-        }
-        if (!permissionToRecordAccepted) finish();
-
-    }
-
 
     private void startRecording(String mFileName) {
         if (!recording) {
             mRecorder = new MediaRecorder();
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mRecorder.setOutputFile(basePath + "/" + mFileName);
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+            mRecorder.setOutputFile(basePath + "/" + mFileName + ".mp4");
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
             try {
@@ -199,6 +188,14 @@ public class RecordingActivity extends AppCompatActivity {
         if (mRecorder != null) {
             mRecorder.release();
             mRecorder = null;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION) {
         }
     }
 
