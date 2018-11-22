@@ -10,4 +10,7 @@
     <string name="flip">Fais un flip</string>
     <string name="arreteToi">Arrête toi</string>
     <string name="etatUrgence">Etat d\'urgence</string>
+    <string name="close">J\'ai fini d\'enregistrer</string>
+    <string name="cancel">Annuler</string>
+    <string name="checkFiles">Voir vos enregistrements</string>
 </resources>
